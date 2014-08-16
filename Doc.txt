@@ -1,0 +1,16 @@
+var png = new byte[] { 137, 80, 78, 71 };    // PNG
+var tiff = new byte[] { 73, 73, 42 };         // TIFF
+var tiff2 = new byte[] { 77, 77, 42 };         // TIFF
+var jpeg = new byte[] { 255, 216, 255, 224 }; // jpeg
+var jpeg2 = new byte[] { 255, 216, 255, 225 }; // jpeg canon
+
+Byte 	1 	2 	3
+Hex 	47 	49 	46
+Char 	G 	I 	F
+
+// BMP
+Byte 	1 	2
+Hex 	42 	4D
+Char 	B 	M
+
+Lire les 4 premiers octets.
