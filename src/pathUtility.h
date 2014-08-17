@@ -13,7 +13,7 @@
 #include <string.h>
 //#include <Shlwapi.h> //Window thingy - added -lShlwapi to linker
 #include "constantes.h"
-#include "tinydir.h"
+#include <tinydir.h>
 
 /*******************************************************
 *** Check if the string point to NULL if not, free
@@ -32,27 +32,27 @@
 *** Return the name
 *** WARNING: the returned string must be freed
 ********************************************************/
-char* getFileName(const char const * file);
+char* getFileName(const char * file);
 
 /*******************************************************
 *** Return a string with the type added
 *** The string returned must be freed later
 ********************************************************/
-char* addFileExtension(const char const * file, FileType const type);
+char* addFileExtension(const char * file, FileType const type);
 
 /*******************************************************
 *** Return an Enum representing the file type
 *** WARNING: Return FILETYPE_COUNT in case of detection
 *** error.
 ********************************************************/
-FileType getFileTypeFromFile(const char const * file);
+FileType getFileTypeFromFile(const char * file);
 
 /*******************************************************
 *** Return an Enum representing the file type
 *** WARNING: Return FILETYPE_COUNT in case of detection
 *** error.
 ********************************************************/
-FileType getFileTypeFromExtension(const char const * extension);
+FileType getFileTypeFromExtension(const char * extension);
 
 /*******************************************************
 *** Tell if the path point to a directory or to a file.

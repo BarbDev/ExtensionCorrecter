@@ -14,7 +14,7 @@ char* getFileExtensionPtr(const char const * file)
 }
 */
 
-char* getFileName(const char const * file)
+char* getFileName(const char * file)
 {
 	int count = 0;
 	const char* c = file + strlen(file);
@@ -31,7 +31,7 @@ char* getFileName(const char const * file)
 	return name;
 }
 
-char* addFileExtension(const char const * file, FileType const type)
+char* addFileExtension(const char * file, FileType const type)
 {
 	char* corrected = NULL;
 
@@ -76,7 +76,7 @@ char* addFileExtension(const char const * file, FileType const type)
 	return NULL;
 }
 
-FileType getFileTypeFromFile(const char const * file)
+FileType getFileTypeFromFile(const char * file)
 {
 	FILE* fileOpened = fopen(file, "r");
 	char buffer[4] = {};
@@ -104,7 +104,7 @@ FileType getFileTypeFromFile(const char const * file)
 	return FILETYPE_COUNT;
 }
 
-FileType getFileTypeFromExtension(const char const * extension)
+FileType getFileTypeFromExtension(const char * extension)
 {
 	if (strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0)
 		return JPG1;

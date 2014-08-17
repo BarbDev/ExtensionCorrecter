@@ -14,3 +14,17 @@ Hex 	42 	4D
 Char 	B 	M
 
 Lire les 4 premiers octets.
+
+/*******************************************************
+*** This program permit to automaticaly rename files
+*** according to their types. It detect only image files.
+*** TO-DO:
+*** -Detect file type -DONE
+*** -Rename it according to type detected
+*** -Check if it does not have an extension -PARTIALY DONE
+*** -add launch options:
+***     -force file detection (check even if it has an
+***     extension) by argv or by command
+***     -if argv contains file name, only check the file
+***     -if argv contains folder name, check folder only
+********************************************************/
