@@ -20,22 +20,25 @@
 #define AGRESSIVE 1
 
 /*******************************************************
-*** LIMITED_TO_DIR: only correct files of the dir
 *** ALL_SUB_DIR: correct files of current dir and his
 *** sub dir.
 *** ONLY_SUB_DIR: correct only files of sub dir of dir
 ********************************************************/
-#define LIMITED_TO_DIR 2
-#define ALL_SUB_DIR 4
-#define ONLY_SUB_DIR 8
+#define ALL_SUB_DIR 2
+#define ONLY_SUB_DIR 4
 
 /*******************************************************
 *** Will make sure that files name does not contains
 *** multiple extension.
 ********************************************************/
-#define REMOVE_UNUSED_EXT 16
+#define REMOVE_UNUSED_EXT 8
+
+#include <tinydir.h>
+
+char launchPath[_TINYDIR_PATH_MAX];
 
 void correctDir(const char * directory, unsigned char params);
 static void deletesExts(char* file);
+static void correctFile(const tinydir_file* file, unsigned char params);
 
 #endif /* CORRECTER_H_ */
