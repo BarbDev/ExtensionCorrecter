@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <Shlwapi.h> //Window thingy - added -lShlwapi to linker
 #include "constantes.h"
 #include <tinydir.h>
 
@@ -28,17 +27,15 @@
 //char* getFileExtensionPtr(const char const * file);
 
 /*******************************************************
-*** Extract the file name from a file path
-*** Return the name
-*** WARNING: the returned string must be freed
-********************************************************/
-char* getFileName(const char * file);
-
-/*******************************************************
 *** Return a string with the type added
 *** The string returned must be freed later
 ********************************************************/
-char* addFileExtension(const char * file, FileType const type);
+void addFileExtension(char ** file, FileType const type);
+
+/*******************************************************
+*** Return 0 if passed file does not exists
+********************************************************/
+unsigned char fileExists(const char * file);
 
 /*******************************************************
 *** Return an Enum representing the file type
@@ -53,24 +50,5 @@ FileType getFileTypeFromFile(const char * file);
 *** error.
 ********************************************************/
 FileType getFileTypeFromExtension(const char * extension);
-
-/*******************************************************
-*** Tell if the path point to a directory or to a file.
-*** Return 1 if it's a directory or 0 if not
-********************************************************/
-//unsigned char isDirectory(const char const * path);
-
-/*******************************************************
-*** Tell if the file passed has an extension
-*** Return 1 if it has one or else 0
-********************************************************/
-//unsigned char hasExtension(const char const * file);
-
-/*******************************************************
-*** Check if the path passed point to an existing valid
-*** file.
-*** Return 1 if yes, or 0
-********************************************************/
-//unsigned char fileExists(const char const * path);
 
 #endif /* PATHUTILITY_H_ */

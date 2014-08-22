@@ -31,55 +31,97 @@ char* getFileName(const char * file)
 	return name;
 }
 
-char* addFileExtension(const char * file, FileType const type)
+void addFileExtension(char ** file, FileType const type)
 {
-	char* corrected = NULL;
-
+	char* realloc_ptr = NULL;
 	switch (type) {
 		case JPG1:
 		case JPG2:
-			corrected = malloc(sizeof(char) * strlen(file) + strlen(".jpg") + 1);
-			if (corrected == NULL) exit(1);
-			strcpy(corrected, file);
-			strcat(corrected, ".jpg");
-			return corrected;
+			realloc_ptr = realloc(*file, sizeof(char) * (strlen(*file) + strlen(".jpg") + 1));
+			if (realloc_ptr == NULL)
+			{
+				perror("Failed to reallocate memory.");
+				free(*file);
+				*file = NULL;
+				return;
+			}
+			*file = realloc_ptr;
+			strcat(*file, ".jpg");
+			break;
 		case PNG:
-			corrected = malloc(sizeof(char) * strlen(file) + strlen(".png") + 1);
-			if (corrected == NULL) exit(1);
-			strcpy(corrected, file);
-			strcat(corrected, ".png");
-			return corrected;
+			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".png") + 1));
+			if (realloc_ptr == NULL)
+			{
+				perror("Failed to reallocate memory.");
+				free(*file);
+				*file = NULL;
+				return;
+			}
+			*file = realloc_ptr;
+			strcat(*file, ".png");
+			break;
 		case BMP:
-			corrected = malloc(sizeof(char) * strlen(file) + strlen(".bmp") + 1);
-			if (corrected == NULL) exit(1);
-			strcpy(corrected, file);
-			strcat(corrected, ".bmp");
-			return corrected;
+			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".bmp") + 1));
+			if (realloc_ptr == NULL)
+			{
+				perror("Failed to reallocate memory.");
+				free(*file);
+				*file = NULL;
+				return;
+			}
+			*file = realloc_ptr;
+			strcat(*file, ".bmp");
+			break;
 		case GIF:
-			corrected = malloc(sizeof(char) * strlen(file) + strlen(".gif") + 1);
-			if (corrected == NULL) exit(1);
-			strcpy(corrected, file);
-			strcat(corrected, ".gif");
-			return corrected;
+			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".gif") + 1));
+			if (realloc_ptr == NULL)
+			{
+				perror("Failed to reallocate memory.");
+				free(*file);
+				*file = NULL;
+				return;
+			}
+			*file = realloc_ptr;
+			strcat(*file, ".gif");
+			break;
 		case TIFF1:
 		case TIFF2:
-			corrected = malloc(sizeof(char) * strlen(file) + strlen(".tiff") + 1);
-			if (corrected == NULL) exit(1);
-			strcpy(corrected, file);
-			strcat(corrected, ".tiff");
-			return corrected;
+			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".tiff") + 1));
+			if (realloc_ptr == NULL)
+			{
+				perror("Failed to reallocate memory.");
+				free(*file);
+				*file = NULL;
+				return;
+			}
+			*file = realloc_ptr;
+			strcat(*file, ".tiff");
+			break;
 		default:
 			// Error: file type not handle
+			puts("Error: AddExtension - type not handled.\n");
 			break;
 	}
+}
 
-	return NULL;
+unsigned char fileExists(const char * file)
+{
+	FILE* fileE = NULL;
+	
+	fileE = fopen(file, "r");
+
+	if (fileE != NULL)
+	{
+		fclose(fileE);	fileE = NULL;
+		return 1;
+	}
+	return 0;
 }
 
 FileType getFileTypeFromFile(const char * file)
 {
 	FILE* fileOpened = fopen(file, "r");
-	char buffer[4] = {};
+	char buffer[4] = {""};
 	int i = 0, j = 0;
 	unsigned char occurences = 0;
 
@@ -119,20 +161,3 @@ FileType getFileTypeFromExtension(const char * extension)
 
 	return FILETYPE_COUNT;
 }
-
-/*
-unsigned char isDirectory(const char const * path)
-{
-	return PathIsDirectoryA(path) == FALSE ? 0 : 1;
-}
-
-unsigned char hasExtension(const char const * file)
-{
-	return PathFindExtensionA(file) == NULL ? 0 : 1;
-}
-
-unsigned char fileExists(const char const * path)
-{
-	return PathFileExists(path) == TRUE ? 1 : 0;
-}
-*/
