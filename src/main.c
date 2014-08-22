@@ -8,53 +8,82 @@
  ============================================================================
  */
 
+#ifdef _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "pathUtility.h"
-
-#define TEST_PATH "C:\\Users\\Tanguy\\Pictures\\Appareil\\2014-03-11\\testFile.gif"
+#include "correcter.h"
 
 int main(int argc, char* argv[]) {
-	/*
-	 tinydir_file file;
-	 if (argc != 2)
-	 {
-	 fprintf(stderr, "Usage: test filename\n");
-	 return 1;
-	 }
-	 if (tinydir_file_open(&file, argv[1]) == -1)
-	 {
-	 perror("Error opening file");
-	 return 1;
-	 }
-	 printf("Path: %s\nName: %s\nExtension: %s\nIs dir? %s\nIs regular file? %s\n",
-	 file.path, file.name, file.extension,
-	 file.is_dir?"yes":"no", file.is_reg?"yes":"no");
-	 */
+	unsigned char i = 0, parameters = 0, foundPath = 0;
 
-	tinydir_dir dir;
-	if (tinydir_open(&dir, ".") == -1) {
-		perror("Error opening file");
-		goto bail;
-	}
-	while (dir.has_next) {
-		tinydir_file file;
-		if (tinydir_readfile(&dir, &file) == -1) {
-			perror("Error getting file");
-			goto bail;
+#ifdef _DEBUG
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetBreakAlloc(64);
+#endif
+
+	// We get the path from where the app is launched
+	strcpy(launchPath, argv[0]);
+	for (i = strlen(launchPath); i > 0; i--)
+	{
+		if (launchPath[i] == '\\' || launchPath[i] == '/')
+		{
+			launchPath[i] = '\0';
+			break;
 		}
-		printf("%s", file.name);
-		if (file.is_dir) {
-			printf("/");
-		}
-		printf("\n");
-		tinydir_next(&dir);
 	}
 
-	bail: tinydir_close(&dir);
+	if (argc == 1)
+		correctDir(".", NON_AGRESSIVE | REMOVE_UNUSED_EXT);
+	else if(argc > 1)
+	{
+		if (argc > 8)
+		{
+			puts("Too much parameters.");
+			puts("\nPress Enter to exit.");
+			getchar();
+			return EXIT_FAILURE;
+		}
+		for (i = 0; i < argc; i++)
+		{
+			if (strcmp(argv[i], "-agressive") == 0)
+				parameters |= AGRESSIVE;
+			else if (strcmp(argv[i], "-nonAgressive") == 0)
+				parameters |= NON_AGRESSIVE;
+			else if (strcmp(argv[i], "-allSubDir") == 0)
+				parameters |= ALL_SUB_DIR;
+			else if (strcmp(argv[i], "-onlySubDir") == 0)
+				parameters |= ONLY_SUB_DIR;
+			else if (strcmp(argv[i], "-removeExts") == 0)
+				parameters |= REMOVE_UNUSED_EXT;
+			else if (strcmp(argv[i], "-help") == 0)
+			{
+				puts("HELP:\n\nCommands available:\n");
+				puts("\t-agressive: even check files with an extension and\n\tadd the corresponding one.\n");
+				puts("\t-nonAgressive: check files without extension and add\n\tthe corresponding one.\n");
+				puts("\t-allSubDir: correct files of current directory and his sub directory.\n");
+				puts("\t-onlySubDir: correct only files of sub directory of directory.\n");
+				puts("\t-removeExts: Will make sure that files name does\n\tnot contains multiple extension.\n");
+				puts("Default commands are: -nonAgressive -removeExts\n\n");
+				puts("If you want to specify a path to correct, it MUST be put before any commands.\nExample: [path] -cmd -cmd...\n");
+				puts("Please relaunch the application, it will close when you press Enter.");
+				getchar();
+				return EXIT_SUCCESS;
+			}
+			else if (i == 1) // string wasn't a parameter so we assume it's a path
+				foundPath = 1;
+		}
+		if (foundPath)
+			correctDir(argv[1], parameters);
+		else
+			correctDir(launchPath, parameters);
+	}
 
-	system("PAUSE");
+	puts("\nPress Enter to exit.");
+	getchar();
 
 	return EXIT_SUCCESS;
 }
