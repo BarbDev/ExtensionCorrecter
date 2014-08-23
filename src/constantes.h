@@ -8,8 +8,18 @@
 #ifndef CONSTANTES_H_
 #define CONSTANTES_H_
 
-typedef enum FileType { PNG, BMP, GIF, JPG1, JPG2, TIFF1, TIFF2, FILETYPE_COUNT } FileType;
+#include <crtdefs.h>
 
-extern const char FileTags[FILETYPE_COUNT][4];
+#define ID_SIZE 4
+#define TYPE_SIZE 16
+
+typedef struct Extension
+{
+	char type[TYPE_SIZE]; // Contain the string that will be concatenated to file's name
+	char id[ID_SIZE]; // Contain the 'id' that will be used to recognise the type of a file
+} Extension;
+
+extern const Extension global_ExtsCollection[];
+extern const size_t global_ExtsCollSize;
 
 #endif /* CONSTANTES_H_ */

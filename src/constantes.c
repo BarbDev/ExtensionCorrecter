@@ -7,10 +7,15 @@
 
 #include "constantes.h"
 
-const char FileTags[FILETYPE_COUNT][4] = {{137, 80, 78, 71},	//PNG
-										{0x42, 0x4D, 0, 0},		//BMP
-										{0x47, 0x49, 0x46, 0},	//GIF
-										{255, 216, 255, 224},	//JPEG1
-										{255, 216, 255, 225},	//JPEG2
-										{73, 73, 42, 0},		//TIFF1
-										{77, 77, 42, 0}};		//TIFF2
+const Extension global_ExtsCollection[] = {
+	{ ".jpg", { 255, 216, 255, 224 } }, //JPG
+	{ ".jpg", { 255, 216, 255, 225 } },
+	{ ".tiff", { 73, 73, 42, 0 } }, //TIFF
+	{ ".tiff", { 77, 77, 42, 0 } },
+	{ ".png", { 137, 80, 78, 71 } }, //PNG
+	{ ".bmp", { 0x42, 0x4D, 0, 0 } }, //BMP
+	{ ".gif", { 0x47, 0x49, 0x46, 0 } }, //GIF
+	{ "error", "err" }
+};
+
+const size_t global_ExtsCollSize = sizeof(global_ExtsCollection) / sizeof(Extension);
