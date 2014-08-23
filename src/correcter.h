@@ -35,7 +35,7 @@
 
 #include <tinydir.h>
 
-char launchPath[_TINYDIR_PATH_MAX];
+char global_launchPath[_TINYDIR_PATH_MAX];
 
 void correctDir(const char * directory, unsigned char params);
 static void deletesExts(char* file);

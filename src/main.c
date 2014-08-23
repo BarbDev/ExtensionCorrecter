@@ -26,12 +26,12 @@ int main(int argc, char* argv[]) {
 #endif
 
 	// We get the path from where the app is launched
-	strcpy(launchPath, argv[0]);
-	for (i = strlen(launchPath); i > 0; i--)
+	strcpy(global_launchPath, argv[0]);
+	for (i = strlen(global_launchPath); i > 0; i--)
 	{
-		if (launchPath[i] == '\\' || launchPath[i] == '/')
+		if (global_launchPath[i] == '\\' || global_launchPath[i] == '/')
 		{
-			launchPath[i] = '\0';
+			global_launchPath[i] = '\0';
 			break;
 		}
 	}
@@ -79,7 +79,7 @@ int main(int argc, char* argv[]) {
 		if (foundPath)
 			correctDir(argv[1], parameters);
 		else
-			correctDir(launchPath, parameters);
+			correctDir(global_launchPath, parameters);
 	}
 
 	puts("\nPress Enter to exit.");
