@@ -7,13 +7,6 @@
 
 #include "pathUtility.h"
 
-/*
-char* getFileExtensionPtr(const char const * file)
-{
-	return PathFindExtensionA(file);
-}
-*/
-
 char* getFileName(const char * file)
 {
 	int count = 0;
@@ -31,8 +24,21 @@ char* getFileName(const char * file)
 	return name;
 }
 
-void addFileExtension(char ** file, FileType const type)
+void addFileExtension(char ** file, const char * type)
 {
+	char* realloc_ptr = NULL;
+	
+	realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(type) + 1));
+	if (realloc_ptr == NULL)
+	{
+		perror("Failed to reallocate memory.");
+		free(*file);
+		*file = NULL;
+		return;
+	}
+	*file = realloc_ptr;
+	strcat(*file, type);
+	/*
 	char* realloc_ptr = NULL;
 	switch (type) {
 		case JPG1:
@@ -102,6 +108,7 @@ void addFileExtension(char ** file, FileType const type)
 			puts("Error: AddExtension - type not handled.\n");
 			break;
 	}
+	*/
 }
 
 unsigned char fileExists(const char * file)
@@ -118,12 +125,13 @@ unsigned char fileExists(const char * file)
 	return 0;
 }
 
-FileType getFileTypeFromFile(const char * file)
+const char* getFileTypeFromFile(const char * file)
 {
 	FILE* fileOpened = fopen(file, "r");
-	char buffer[4] = {""};
-	int i = 0, j = 0;
+	char buffer[ID_SIZE] = {""};
+	size_t i = 0, j = 0;
 	unsigned char occurences = 0;
+	char c = 0;
 
 	if (fileOpened == NULL) exit(1);
 
@@ -131,23 +139,33 @@ FileType getFileTypeFromFile(const char * file)
 
 	if (fileOpened != NULL) { fclose(fileOpened); fileOpened = NULL; }
 
-	for (i = 0; i < FILETYPE_COUNT; i++)
+	for (i = 0; i < global_ExtsCollSize; i++)
 	{
-		for (j = 0; j < 4; j++)
+		for (j = 0; j < ID_SIZE; j++)
 		{
-			if (FileTags[i][j] == buffer[j])
+			c = global_ExtsCollection[i].id[j];
+			if (c == buffer[j])
 				occurences++;
-			if (FileTags[i][j] == 0)
+			if (c == 0)
 				occurences++;
 		}
-		if (occurences == 4) return i;
+		if (occurences == 4) return global_ExtsCollection[i].type;
 		else if (occurences < 4 && occurences > 0) occurences = 0;
 	}
-	return FILETYPE_COUNT;
+	return "error";
 }
 
-FileType getFileTypeFromExtension(const char * extension)
+const char* getFileTypeFromExtension(const char * extension)
 {
+	size_t i = 0;
+	for (i = 0; i < global_ExtsCollSize; i++)
+	{
+		if (strcmp(global_ExtsCollection[i].type, extension) == 0)
+			return global_ExtsCollection[i].type;
+	}
+
+	return "error";
+	/*
 	if (strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0)
 		return JPG1;
 	else if (strcmp(extension, ".png") == 0)
@@ -160,4 +178,5 @@ FileType getFileTypeFromExtension(const char * extension)
 		return TIFF1;
 
 	return FILETYPE_COUNT;
+	*/
 }

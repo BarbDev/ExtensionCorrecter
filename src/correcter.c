@@ -53,7 +53,7 @@ void correctDir(const char * directory, unsigned char params)
 			}
 			else
 			{
-				if ((params & ONLY_SUB_DIR) && strcmp(dir.path, launchPath) == 0)
+				if ((params & ONLY_SUB_DIR) && strcmp(dir.path, global_launchPath) == 0)
 				{
 					tinydir_next(&dir);
 					continue;
@@ -70,7 +70,7 @@ void correctDir(const char * directory, unsigned char params)
 					tinydir_next(&dir);
 					continue;
 				}
-				if (file.extension[0] == '\0' || (getFileTypeFromExtension(file.extension) == FILETYPE_COUNT && strlen(file.extension) > 10)) // Has no extension
+				if (file.extension[0] == '\0' || (strcmp(getFileTypeFromExtension(file.extension),"error") == 0 && strlen(file.extension) > 10)) // We assume that it isnt an extension
 				{
 					correctFile(&file, params);
 				}
@@ -94,13 +94,13 @@ static void deletesExts(char* file)
 		else if (file[i] == '/') return;
 		else if (file[i] == '.')
 		{
-			if (charCount > 16)
+			if (charCount > TYPE_SIZE)
 			{
 				puts("Error: Couldn't suppress extension. Too long string.\n");
 				return;
 			}
 			strncpy(extension, file + (strlen(file) - charCount - 1), charCount + 1);
-			if (getFileTypeFromExtension(extension) != FILETYPE_COUNT)
+			if (strcmp(getFileTypeFromExtension(extension), "error") != 0)
 			{
 				file[strlen(file) - charCount - 1] = '\0';
 				charCount = 0;
@@ -113,7 +113,6 @@ static void deletesExts(char* file)
 static void correctFile(const tinydir_file* file, unsigned char params)
 {
 	char* temp = NULL;
-	FileType type;
 
 	temp = malloc(sizeof(char)* strlen(file->path) + 1);
 	strcpy(temp, file->path);
@@ -121,8 +120,7 @@ static void correctFile(const tinydir_file* file, unsigned char params)
 	if ((params & REMOVE_UNUSED_EXT) && file->extension[0] != '\0')
 		deletesExts(temp);
 
-	type = getFileTypeFromFile(file->path);
-	addFileExtension(&temp, type);
+	addFileExtension(&temp, getFileTypeFromFile(file->path));
 
 	if (fileExists(temp))
 	{
