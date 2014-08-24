@@ -8,17 +8,16 @@
 #ifndef CONSTANTES_H_
 #define CONSTANTES_H_
 
-#include <crtdefs.h>
+#include <stddef.h>
 
 #define ID_SIZE 4
 #define TYPE_SIZE 16
 
-struct Extension
+typedef struct Extension
 {
 	char type[TYPE_SIZE]; // Contain the string that will be concatenated to file's name
 	char id[ID_SIZE]; // Contain the 'id' that will be used to recognise the type of a file
-};
-typedef struct Extension Extension;
+} Extension;
 
 extern const Extension global_ExtsCollection[];
 extern const size_t global_ExtsCollSize;
