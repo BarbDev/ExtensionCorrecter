@@ -15,14 +15,8 @@
 #include <tinydir.h>
 
 /*******************************************************
-*** Check if the string point to NULL if not, free
-*** the string.
-********************************************************/
-#define CHECKFREED(str) { if (str != NULL){ free(str); str = NULL; } }
-
-/*******************************************************
-*** Return a string with the type added
-*** The string returned must be freed later
+*** Modifie directly the file passed, append to it the
+*** type passed.
 ********************************************************/
 void addFileExtension(char ** file, const char * type);
 
@@ -32,15 +26,15 @@ void addFileExtension(char ** file, const char * type);
 unsigned char fileExists(const char * file);
 
 /*******************************************************
-*** Return an Enum representing the file type
-*** WARNING: Return FILETYPE_COUNT in case of detection
+*** Return an string representing the file type
+*** WARNING: Return "error" in case of detection
 *** error.
 ********************************************************/
 const char* getFileTypeFromFile(const char * file);
 
 /*******************************************************
-*** Return an Enum representing the file type
-*** WARNING: Return FILETYPE_COUNT in case of detection
+*** Return an string representing the file type
+*** WARNING: Return "error" in case of detection
 *** error.
 ********************************************************/
 const char* getFileTypeFromExtension(const char * extension);

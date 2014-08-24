@@ -38,77 +38,6 @@ void addFileExtension(char ** file, const char * type)
 	}
 	*file = realloc_ptr;
 	strcat(*file, type);
-	/*
-	char* realloc_ptr = NULL;
-	switch (type) {
-		case JPG1:
-		case JPG2:
-			realloc_ptr = realloc(*file, sizeof(char) * (strlen(*file) + strlen(".jpg") + 1));
-			if (realloc_ptr == NULL)
-			{
-				perror("Failed to reallocate memory.");
-				free(*file);
-				*file = NULL;
-				return;
-			}
-			*file = realloc_ptr;
-			strcat(*file, ".jpg");
-			break;
-		case PNG:
-			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".png") + 1));
-			if (realloc_ptr == NULL)
-			{
-				perror("Failed to reallocate memory.");
-				free(*file);
-				*file = NULL;
-				return;
-			}
-			*file = realloc_ptr;
-			strcat(*file, ".png");
-			break;
-		case BMP:
-			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".bmp") + 1));
-			if (realloc_ptr == NULL)
-			{
-				perror("Failed to reallocate memory.");
-				free(*file);
-				*file = NULL;
-				return;
-			}
-			*file = realloc_ptr;
-			strcat(*file, ".bmp");
-			break;
-		case GIF:
-			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".gif") + 1));
-			if (realloc_ptr == NULL)
-			{
-				perror("Failed to reallocate memory.");
-				free(*file);
-				*file = NULL;
-				return;
-			}
-			*file = realloc_ptr;
-			strcat(*file, ".gif");
-			break;
-		case TIFF1:
-		case TIFF2:
-			realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(".tiff") + 1));
-			if (realloc_ptr == NULL)
-			{
-				perror("Failed to reallocate memory.");
-				free(*file);
-				*file = NULL;
-				return;
-			}
-			*file = realloc_ptr;
-			strcat(*file, ".tiff");
-			break;
-		default:
-			// Error: file type not handle
-			puts("Error: AddExtension - type not handled.\n");
-			break;
-	}
-	*/
 }
 
 unsigned char fileExists(const char * file)
@@ -165,18 +94,4 @@ const char* getFileTypeFromExtension(const char * extension)
 	}
 
 	return "error";
-	/*
-	if (strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0)
-		return JPG1;
-	else if (strcmp(extension, ".png") == 0)
-		return PNG;
-	else if (strcmp(extension, ".gif") == 0)
-		return GIF;
-	else if (strcmp(extension, ".bmp") == 0)
-		return BMP;
-	else if (strcmp(extension, ".tiff") == 0)
-		return TIFF1;
-
-	return FILETYPE_COUNT;
-	*/
 }
