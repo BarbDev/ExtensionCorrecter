@@ -13,11 +13,12 @@
 #define ID_SIZE 4
 #define TYPE_SIZE 16
 
-typedef struct Extension
+struct Extension
 {
 	char type[TYPE_SIZE]; // Contain the string that will be concatenated to file's name
 	char id[ID_SIZE]; // Contain the 'id' that will be used to recognise the type of a file
-} Extension;
+};
+typedef struct Extension Extension;
 
 extern const Extension global_ExtsCollection[];
 extern const size_t global_ExtsCollSize;
