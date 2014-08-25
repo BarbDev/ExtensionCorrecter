@@ -19,6 +19,6 @@ Commands available:
 
 Default commands are: -nonAgressive -removeExts
 If you want to specify a path to correct, it MUST be put before any commands.
-Example: [path] -cmd -cmd...\n");
+Example: [path] -cmd -cmd...
 
 While it executes, the program will display all the filename that it might parse.
