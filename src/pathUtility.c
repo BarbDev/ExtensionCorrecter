@@ -64,7 +64,7 @@ const char* getFileTypeFromFile(const char * file)
 
 	if (fileOpened == NULL) exit(1);
 
-	if (fread(buffer, sizeof(char), 4, fileOpened) != 4) exit(1); //reading error
+	if (fread(buffer, sizeof(char), ID_SIZE, fileOpened) != ID_SIZE) exit(1); //reading error
 
 	if (fileOpened != NULL) { fclose(fileOpened); fileOpened = NULL; }
 
@@ -78,8 +78,8 @@ const char* getFileTypeFromFile(const char * file)
 			if (c == 0)
 				occurences++;
 		}
-		if (occurences == 4) return global_ExtsCollection[i].type;
-		else if (occurences < 4 && occurences > 0) occurences = 0;
+		if (occurences == ID_SIZE) return global_ExtsCollection[i].type;
+		else if (occurences < ID_SIZE && occurences > 0) occurences = 0;
 	}
 	return "error";
 }
