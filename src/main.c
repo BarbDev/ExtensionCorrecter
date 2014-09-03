@@ -8,6 +8,7 @@
 #include "correcter.h"
 #include "log.h"
 #include "error.h"
+#include "constantes.h"
 
 void displayMenu(void);
 void displayHelp(void);

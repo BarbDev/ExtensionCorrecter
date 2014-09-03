@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "correcter.h" // should not be included
+#include "constantes.h"
 #include "error.h"
 
 static unsigned int nbeFilesModified = 0;

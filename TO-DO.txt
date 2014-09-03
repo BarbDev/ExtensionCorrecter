@@ -1,3 +1,0 @@
--correct number of files parsed //DONE
--create a log file for errors //DONE
--get all constants and define together
