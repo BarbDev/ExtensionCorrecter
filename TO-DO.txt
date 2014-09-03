@@ -1,0 +1,1 @@
+-make sure file drag and drop work
