@@ -9,6 +9,7 @@
 #include "pathUtility.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "log.h"
 
 void correctDir(const char * directory, unsigned char params)
 {
@@ -17,10 +18,9 @@ void correctDir(const char * directory, unsigned char params)
 
 	if (((params & NON_AGRESSIVE) && (params & AGRESSIVE)) || ((params & ALL_SUB_DIR) && (params & ONLY_SUB_DIR)))
 	{
-		// Error
 		if ((params & NON_AGRESSIVE) && (params & AGRESSIVE))
 			puts("Error: Got two uncompatible commands:\n\t-agressive -nonAgressive");
-		else
+		if ((params & ALL_SUB_DIR) && (params & ONLY_SUB_DIR))
 			puts("Error: Got two uncompatible commands:\n\t-allSubDir -onlySubDir");
 		return;
 	}
@@ -29,26 +29,33 @@ void correctDir(const char * directory, unsigned char params)
 		if (tinydir_open(&dir, directory) == -1)
 		{
 			perror("Error opening file");
-			printf("%s", directory);
+			printf("%s\n", directory);
+			return;
 		}
+		printParameters(params);
 		while (dir.has_next)
 		{
+			displayProgress(dir.path, file.name);
 			if (tinydir_readfile(&dir, &file) == -1)
 			{
 				perror("Error getting file");
+				incrementDirFailed();
+				tinydir_next(&dir);
+				continue;
 			}
-			printf("%s", file.name);
 			if (strcmp(file.name, ".") == 0 || strcmp(file.name, "..") == 0) // see if it's parent directory
 			{
 				tinydir_next(&dir);
 				continue;
 			}
+			incrementFilesParsed();
 			if (file.is_dir)
 			{
-				printf("/");
 				if ((params & ALL_SUB_DIR) || (params & ONLY_SUB_DIR))
 				{
+					printParameters(params);
 					correctDir(file.path, params);
+					incrementDirParsed();
 				}
 			}
 			else
@@ -67,15 +74,16 @@ void correctDir(const char * directory, unsigned char params)
 				else if ((params & AGRESSIVE) && (file.extension != NULL)) // Has an extension: Force detection
 				{
 					correctFile(&file, params);
+					addFileToModif(file.name);
 					tinydir_next(&dir);
 					continue;
 				}
 				if (file.extension[0] == '\0' || (strcmp(getFileTypeFromExtension(file.extension),"error") == 0 && strlen(file.extension) > 10)) // We assume that it isnt an extension
 				{
 					correctFile(&file, params);
+					addFileToModif(file.name);
 				}
 			}
-			printf("\n");
 			tinydir_next(&dir);
 		}
 	}
@@ -131,4 +139,20 @@ static void correctFile(const tinydir_file* file, unsigned char params)
 	}
 	rename(file->path, temp);
 	free(temp);	temp = NULL;
+}
+
+static void printParameters(unsigned char params)
+{
+	puts("Parameters:");
+	if (params & NON_AGRESSIVE)
+		puts(" non agressive");
+	if (params & AGRESSIVE)
+		puts(" agressive");
+	if (params & ALL_SUB_DIR)
+		puts(" all sub dir");
+	if (params & ONLY_SUB_DIR)
+		puts(" only sub dir");
+	if (params & REMOVE_UNUSED_EXT)
+		puts(" remove unused ext");
+	puts("\n");
 }
