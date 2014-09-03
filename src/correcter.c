@@ -10,6 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "log.h"
+#include "error.h"
+
+static void deletesExts(char* file);
+static void correctFile(const tinydir_file* file, unsigned char params);
 
 void correctDir(const char * directory, unsigned char params)
 {
@@ -19,9 +23,9 @@ void correctDir(const char * directory, unsigned char params)
 	if (((params & NON_AGRESSIVE) && (params & AGRESSIVE)) || ((params & ALL_SUB_DIR) && (params & ONLY_SUB_DIR)))
 	{
 		if ((params & NON_AGRESSIVE) && (params & AGRESSIVE))
-			puts("Error: Got two uncompatible commands:\n\t-agressive -nonAgressive");
+			addError("Got two uncompatible commands:\n\t-agressive -nonAgressive");
 		if ((params & ALL_SUB_DIR) && (params & ONLY_SUB_DIR))
-			puts("Error: Got two uncompatible commands:\n\t-allSubDir -onlySubDir");
+			addError("Got two uncompatible commands:\n\t-allSubDir -onlySubDir");
 		return;
 	}
 	else
@@ -32,10 +36,9 @@ void correctDir(const char * directory, unsigned char params)
 			printf("%s\n", directory);
 			return;
 		}
-		printParameters(params);
 		while (dir.has_next)
 		{
-			displayProgress(dir.path, file.name);
+			displayProgress(dir.path, file.name, params);
 			if (tinydir_readfile(&dir, &file) == -1)
 			{
 				perror("Error getting file");
@@ -48,18 +51,17 @@ void correctDir(const char * directory, unsigned char params)
 				tinydir_next(&dir);
 				continue;
 			}
-			incrementFilesParsed();
 			if (file.is_dir)
 			{
 				if ((params & ALL_SUB_DIR) || (params & ONLY_SUB_DIR))
 				{
-					printParameters(params);
 					correctDir(file.path, params);
 					incrementDirParsed();
 				}
 			}
 			else
 			{
+				incrementFilesParsed();
 				if ((params & ONLY_SUB_DIR) && strcmp(dir.path, global_launchPath) == 0)
 				{
 					tinydir_next(&dir);
@@ -104,7 +106,7 @@ static void deletesExts(char* file)
 		{
 			if (charCount > TYPE_SIZE)
 			{
-				puts("Error: Couldn't suppress extension. Too long string.\n");
+				addError("Couldn't suppress extension. Too long string.\n");
 				return;
 			}
 			strncpy(extension, file + (strlen(file) - charCount - 1), charCount + 1);
@@ -134,25 +136,9 @@ static void correctFile(const tinydir_file* file, unsigned char params)
 	{
 		// Do stuff, like telling user that it didn't corrected cus file already exist.
 		free(temp);	temp = NULL;
-		puts("Error: Couldn't rename file. File already exists.\n");
+		addError("Couldn't rename file. File already exists.\n");
 		return;
 	}
 	rename(file->path, temp);
 	free(temp);	temp = NULL;
-}
-
-static void printParameters(unsigned char params)
-{
-	puts("Parameters:");
-	if (params & NON_AGRESSIVE)
-		puts(" non agressive");
-	if (params & AGRESSIVE)
-		puts(" agressive");
-	if (params & ALL_SUB_DIR)
-		puts(" all sub dir");
-	if (params & ONLY_SUB_DIR)
-		puts(" only sub dir");
-	if (params & REMOVE_UNUSED_EXT)
-		puts(" remove unused ext");
-	puts("\n");
 }

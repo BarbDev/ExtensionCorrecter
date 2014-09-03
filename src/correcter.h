@@ -38,8 +38,5 @@
 char global_launchPath[_TINYDIR_PATH_MAX];
 
 void correctDir(const char * directory, unsigned char params);
-static void deletesExts(char* file);
-static void correctFile(const tinydir_file* file, unsigned char params);
-static void printParameters(unsigned char params);
 
 #endif /* CORRECTER_H_ */
