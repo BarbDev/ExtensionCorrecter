@@ -1,9 +1,3 @@
--Be able to see easily:
-    -files modified
-    -number of files parsed, successfuly modified
-    -error that occurred
-    
-how to ?
-    make a list of files modifieds at the end? (or put it in a file?)
-    simply print the numbers of files parsed etc...
-    add option to have detailed list?
+-correct number of files parsed //DONE
+-create a log file for errors //DONE
+-get all constants and define together
