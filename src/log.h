@@ -1,6 +1,7 @@
 #ifndef LOG_H_
 #define LOG_H_
 
+/* File tracking stuff */
 void incrementDirParsed(void);
 void incrementDirFailed(void);
 void incrementFilesParsed(void);
@@ -15,6 +16,6 @@ void freeLists(void);
 void printModifList(void);
 void clearConsoleBuffer(void);
 char getInputCh(void);
-void displayProgress(const char* currDir, const char* currFile);
+void displayProgress(const char* currDir, const char* currFile, unsigned char params);
 
 #endif /* LOG_H_ */

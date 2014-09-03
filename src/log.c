@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "correcter.h" // should not be included
+#include "error.h"
 
 static unsigned int nbeFilesModified = 0;
 static unsigned int nbeFilesFailed = 0;
@@ -10,6 +12,8 @@ static unsigned int nbeDirParsed = 0;
 static unsigned int nbeDirFailed = 0;
 static char** listModif = NULL;
 static char** listFail = NULL;
+
+static void printParameters(unsigned char params);
 
 void incrementDirParsed(void)
 {
@@ -59,13 +63,13 @@ void addFileToModif(const char* file)
 		listModif = (char**)malloc(sizeof(listModif));
 		if (listModif == NULL)
 		{
-			puts("Error: failed to allocate list modif.\n");
+			addError("Failed to allocate list modif.\n");
 			return;
 		}
 		listModif[0] = (char*)malloc(sizeof(listModif[0]) * (strlen(file) + 1));
 		if (listModif[0] == NULL)
 		{
-			puts("Error: failed to allocate list modif str.\n");
+			addError("Failed to allocate list modif str.\n");
 			free(listModif);
 			return;
 		}
@@ -77,14 +81,14 @@ void addFileToModif(const char* file)
 		temp = (char**)realloc(listModif, sizeof(listModif) * (nbeFilesModified + 1));
 		if (temp == NULL)
 		{
-			puts("Error: failed to reallocate list modif.\n");
+			addError("Failed to reallocate list modif.\n");
 			return;
 		}
 		listModif = temp;
 		listModif[nbeFilesModified] = (char*)malloc(sizeof(listModif[nbeFilesModified]) * (strlen(file) + 1));
 		if (listModif[nbeFilesModified] == NULL)
 		{
-			puts("Error: failed to reallocate list modif str.\n");
+			addError("Failed to reallocate list modif str.\n");
 			return;
 		}
 		strcpy(listModif[nbeFilesModified], file);
@@ -100,13 +104,13 @@ void addFileToFail(const char* file)
 		listFail = (char**)malloc(sizeof(listFail));
 		if (listFail == NULL)
 		{
-			puts("Error: failed to allocate list fail.\n");
+			addError("Failed to allocate list fail.\n");
 			return;
 		}
 		listFail[0] = (char*)malloc(sizeof(listFail[0]) * (strlen(file) + 1));
 		if (listFail[0] == NULL)
 		{
-			puts("Error: failed to allocate list fail str.\n");
+			addError("Failed to allocate list fail str.\n");
 			free(listFail);
 			return;
 		}
@@ -118,14 +122,14 @@ void addFileToFail(const char* file)
 		temp = (char**)realloc(listFail, sizeof(listFail) * (nbeFilesFailed + 1));
 		if (temp == NULL)
 		{
-			puts("Error: failed to reallocate list fail.\n");
+			addError("Failed to reallocate list fail.\n");
 			return;
 		}
 		listFail = temp;
 		listFail[nbeFilesFailed] = (char*)malloc(sizeof(listFail[nbeFilesFailed]) * (strlen(file) + 1));
 		if (listFail[nbeFilesFailed] == NULL)
 		{
-			puts("Error: failed to reallocate list fail str.\n");
+			addError("Failed to reallocate list fail str.\n");
 			return;
 		}
 		strcpy(listFail[nbeFilesFailed], file);
@@ -187,7 +191,7 @@ char getInputCh(void)
 	return c;
 }
 
-void displayProgress(const char* currDir, const char* currFile)
+void displayProgress(const char* currDir, const char* currFile, unsigned char params)
 {
 	static unsigned char i = 0;
 	char parseSymbole[] = { '|', '/', '-', '\\' };
@@ -196,7 +200,9 @@ void displayProgress(const char* currDir, const char* currFile)
 #else
 	system("clear");
 #endif
-	flushall();
+	//_flushall();
+	fflush(stdout);
+	printParameters(params);
 	printf("Processing %c%c%c\n", parseSymbole[i], parseSymbole[i], parseSymbole[i]);
 	i++; if (i > 3) i = 0;
 	printf("Number of files parsed: %d\n", nbeFilesParsed);
@@ -206,4 +212,20 @@ void displayProgress(const char* currDir, const char* currFile)
 	printf("Number of directory failed: %d\n", nbeDirFailed);
 	printf("\nCurrent dir parsed: %s\n", currDir);
 	printf("Current file parsed: %s\n", currFile);
+}
+
+static void printParameters(unsigned char params)
+{
+	puts("Parameters:");
+	if (params & NON_AGRESSIVE)
+		puts(" non agressive");
+	if (params & AGRESSIVE)
+		puts(" agressive");
+	if (params & ALL_SUB_DIR)
+		puts(" all sub dir");
+	if (params & ONLY_SUB_DIR)
+		puts(" only sub dir");
+	if (params & REMOVE_UNUSED_EXT)
+		puts(" remove unused ext");
+	puts("\n");
 }
