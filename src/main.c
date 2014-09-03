@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "correcter.h"
 #include "log.h"
+#include "error.h"
 
 void displayMenu(void);
 void displayHelp(void);
@@ -21,6 +22,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 	atexit(freeLists);
+	atexit(closeErrorStream);
 
 	// We get the path from where the app is launched
 	strcpy(global_launchPath, argv[0]);
