@@ -1,1 +1,6 @@
--make sure file drag and drop work
+- "log.c" simplify function addFileToModif() and addFileToFail() to only one function
+-rework correcter.c
+	-make it clearer
+-find a way to easily check argument passed (for drag and drop of folder and file, as well as passing arguments)
+-find a way to reduce call to errorInitStream() and check
+-find limits of the program (mainly file extension recognition and correction)
