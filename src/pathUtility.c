@@ -31,6 +31,7 @@ void addFileExtension(char ** file, const char * type)
 	realloc_ptr = realloc(*file, sizeof(char)* (strlen(*file) + strlen(type) + 1));
 	if (realloc_ptr == NULL)
 	{
+		errorInitStream();
 		perror("Failed to reallocate memory.");
 		free(*file);
 		*file = NULL;
