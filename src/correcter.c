@@ -32,7 +32,8 @@ void correctDir(const char * directory, unsigned char params)
 	{
 		if (tinydir_open(&dir, directory) == -1)
 		{
-			perror("Error opening file");
+			errorInitStream();
+			perror("Error opening directory");
 			printf("%s\n", directory);
 			return;
 		}
@@ -41,7 +42,8 @@ void correctDir(const char * directory, unsigned char params)
 			displayProgress(dir.path, file.name, params);
 			if (tinydir_readfile(&dir, &file) == -1)
 			{
-				perror("Error getting file");
+				errorInitStream();
+				perror("Error opening file");
 				incrementDirFailed();
 				tinydir_next(&dir);
 				continue;

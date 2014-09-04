@@ -4,15 +4,19 @@
 
 static unsigned char streamOpened = 0;
 
+void errorInitStream(void)
+{
+	if (!streamOpened)
+	{
+		freopen("logExtCorr.txt", "a", stderr);
+		streamOpened = 1;
+	}
+}
+
 void closeErrorStream(void)
 {
 	if (streamOpened)
 		fclose(stderr);
-}
-
-static void errorInitStream(void)
-{
-	freopen("logExtCorr.txt", "a", stderr);
 }
 
 void addError(const char* str)
@@ -21,7 +25,10 @@ void addError(const char* str)
 	struct tm* timeinfo;
 
 	if (!streamOpened)
+	{
 		errorInitStream();
+		streamOpened = 1;
+	}
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	fprintf(stderr, "%s\n", asctime(timeinfo));
